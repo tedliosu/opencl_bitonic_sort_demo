@@ -18,7 +18,7 @@
 #include "naive_bitonic_sort_opencl.h"
 
 // Size of array to be sorted via bitonic sort
-#define ARRAY_LEN 500000000
+#define ARRAY_LEN 100000000
 
 // Number of OpenCL devices used
 #define NUM_CL_DEVICES 1
