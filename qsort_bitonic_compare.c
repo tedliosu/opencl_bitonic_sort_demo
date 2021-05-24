@@ -146,7 +146,8 @@ int main(int argc, char* argv[]) {
     cl_program program;
     cl_kernel kernel;
     cl_mem buffer_in;
-    clock_t sort_start_time, sort_end_time;
+    struct timespec current_time;
+    double sort_start_time, sort_end_time;
     struct Array_With_Length_Padded* sample_array = get_rand_padded_array(ARRAY_LEN);
     struct Array_With_Length_Padded* sample_array_cp = deep_cp_padded_array(sample_array);
     struct Array_With_Length_Padded* sample_array_2nd_cp = deep_cp_padded_array(sample_array);
@@ -156,7 +157,8 @@ int main(int argc, char* argv[]) {
     configure_opencl_env(&context, &queue, &program);
 
     // Get time of when parallel bitonic sort algorithm starts executing
-    sort_start_time = clock();
+    timespec_get(&current_time, TIME_UTC);
+    sort_start_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
     load_arrays_bitonic_sort(&context, &queue, array_list, cl_mem_ops);
 
@@ -168,39 +170,41 @@ int main(int argc, char* argv[]) {
                                                          sample_array->contents, 0, NULL, NULL);
 
     // Get time of when parallel bitonic sort finishes executing
-    sort_end_time = clock();
+    timespec_get(&current_time, TIME_UTC);
+    sort_end_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
     // Report to user time spent on sorting using parallelized bitonic sort in OpenCL
-    printf(BITONIC_PARALLEL_SORT_MESSAGE, sample_array->array_len_actual,
-                      (double) (sort_end_time - sort_start_time) / CLOCKS_PER_SEC);
+    printf(BITONIC_PARALLEL_SORT_MESSAGE, sample_array->array_len_actual, sort_end_time - sort_start_time);
  
     // Get time of when serial bitonic sort algorithm starts executing
-    sort_start_time = clock();
+    timespec_get(&current_time, TIME_UTC);
+    sort_start_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
     serial_bitonic_sort(sample_array_cp, SORTING_DIRECTION);
 
     // Get time of when serial bitonic sort finishes executing
-    sort_end_time = clock();
+    timespec_get(&current_time, TIME_UTC);
+    sort_end_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
     // Report to user time spent on sorting using serial bitonic sort on CPU
-    printf(BITONIC_SERIAL_SORT_MESSAGE, sample_array_cp->array_len_actual,
-                      (double) (sort_end_time - sort_start_time) / CLOCKS_PER_SEC);
+    printf(BITONIC_SERIAL_SORT_MESSAGE, sample_array_cp->array_len_actual, sort_end_time - sort_start_time);
 
     // Signal to user start of Qsort
     printf(NOTIFY_USER_QSORT_START);
 
     // Get time of when qsort starts executing
-    sort_start_time = clock();
+    timespec_get(&current_time, TIME_UTC);
+    sort_start_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
     qsort(sample_array_2nd_cp->contents, sample_array_2nd_cp->padded_2n_length,
                     sizeof(*(sample_array_2nd_cp->contents)), compare_elements_qsort);
 
     // Get time of when qsort finishes executing
-    sort_end_time = clock();
+    timespec_get(&current_time, TIME_UTC);
+    sort_end_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
     // Report to user time spent on sorting using qsort
-    printf(QSORT_MESSAGE, sample_array_2nd_cp->array_len_actual,
-                    (double) (sort_end_time - sort_start_time) / CLOCKS_PER_SEC);
+    printf(QSORT_MESSAGE, sample_array_2nd_cp->array_len_actual, sort_end_time - sort_start_time);
 
     /*
      * if sorting direction was descending, have padding location indicator be adjusted to 

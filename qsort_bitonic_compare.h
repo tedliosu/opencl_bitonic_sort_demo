@@ -72,6 +72,9 @@
   #endif
 #endif
 
+// Number of nanoseconds in a second
+#define NANOSECS_IN_SEC 1000000000.0
+
 // Messages to user informing time took to sort and how many numbers were sorted
 #define BITONIC_PARALLEL_SORT_MESSAGE "Parallelized bitonic sort of %d element(s)"\
                                             " on OpenCL device took %lf seconds\n\n"
