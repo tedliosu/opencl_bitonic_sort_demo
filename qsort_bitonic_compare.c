@@ -82,7 +82,7 @@ void configure_opencl_env(cl_context *context, cl_command_queue* queue,
     cl_queue_properties queue_properties[] = {CL_QUEUE_PROPERTIES, CL_QUEUE_PROFILING_ENABLE, 0};
     
     clGetPlatformIDs(NUM_CL_DEVICES, &platform, NULL);
-    clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, NUM_CL_DEVICES, &device, NULL);
+    clGetDeviceIDs(platform, CL_DEVICE_TYPE_DEFAULT, NUM_CL_DEVICES, &device, NULL);
     *context = clCreateContext(NULL, NUM_CL_DEVICES, &device, NULL, NULL, NULL);
     *queue = clCreateCommandQueueWithProperties(*context, device, queue_properties, NULL);
 
