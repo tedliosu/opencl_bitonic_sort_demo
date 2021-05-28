@@ -22,8 +22,12 @@
 
 // Number of OpenCL platforms on host machine
 #define NUM_CL_PLATFORMS 2
-// Index of OpenCL dGPU platform in list of platforms returned
-#define DGPU_PLATFORM_INDEX 1
+/*
+ * Index of desired OpenCL platform (e.g. Portable Computing
+ *    Language, AMD Accelerated Parallel Processing) in
+ *    list of platforms returned.
+ */
+#define DESIRED_PLATFORM_INDEX 1
 // Number of OpenCL devices per OpenCL platform
 #define NUM_CL_DEVICES 1
 // Number of OpenCL programs to be loaded

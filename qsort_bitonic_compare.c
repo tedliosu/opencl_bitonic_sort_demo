@@ -82,7 +82,7 @@ void configure_opencl_env(cl_context *context, cl_command_queue* queue,
     cl_platform_id *platforms = malloc(sizeof(cl_platform_id) * NUM_CL_PLATFORMS);
     
     clGetPlatformIDs(NUM_CL_PLATFORMS, platforms, NULL);
-    clGetDeviceIDs(platforms[DGPU_PLATFORM_INDEX], CL_DEVICE_TYPE_DEFAULT, NUM_CL_DEVICES, &device, NULL);
+    clGetDeviceIDs(platforms[DESIRED_PLATFORM_INDEX], CL_DEVICE_TYPE_DEFAULT, NUM_CL_DEVICES, &device, NULL);
     *context = clCreateContext(NULL, NUM_CL_DEVICES, &device, NULL, NULL, NULL);
     *queue = clCreateCommandQueueWithProperties(*context, device, queue_properties, NULL);
 
