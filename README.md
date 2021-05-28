@@ -21,8 +21,12 @@
 
 6. You may tweak the ARRAY_LEN macro value in "qsort_bitonic_compare.h", the ARRAY_TYPE macro value in
    "naive_bitonic_sort_opencl.h", the NUM_THREADS_IN_BLOCK macro value in "naive_bitonic_sort_opencl.h",
-   and the SORTING_DIRECTION macro value in "naive_bitonic_sort_opencl.h" to see the executable sort
-   different types of data with various different parameters.
+   and the SORTING_DIRECTION macro value in "naive_bitonic_sort_opencl.h" to see the executable perform
+   parallelized bitonic sort in OpenCL, serial bitonic sort in C, and qsort in C with different types of
+   data with various different parameters. You may also adjust the DESIRED_PLATFORM_INDEX macro value in
+   "qsort_bitonic_compare.h" for running parallelize bitonic sort in OpenCL on different OpenCL platforms
+   on your machine. However, if you have only 1 OpenCL platform installed on your machine, you MUST
+   set DESIRED_PLATFORM_INDEX to 0.
 
 # Comments about code in general
 
