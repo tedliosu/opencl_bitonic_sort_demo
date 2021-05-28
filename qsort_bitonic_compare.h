@@ -20,7 +20,11 @@
 // Size of array to be sorted via bitonic sort
 #define ARRAY_LEN 100000000
 
-// Number of OpenCL devices used
+// Number of OpenCL platforms on host machine
+#define NUM_CL_PLATFORMS 2
+// Index of OpenCL dGPU platform in list of platforms returned
+#define DGPU_PLATFORM_INDEX 1
+// Number of OpenCL devices per OpenCL platform
 #define NUM_CL_DEVICES 1
 // Number of OpenCL programs to be loaded
 #define OPENCL_PROGS 1

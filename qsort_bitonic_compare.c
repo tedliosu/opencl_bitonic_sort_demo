@@ -76,13 +76,13 @@ void configure_opencl_env(cl_context *context, cl_command_queue* queue,
     assert(queue != NULL);
     assert(program != NULL);
 
-    cl_platform_id platform;
     cl_device_id device;
     char deviceName[MAX_LEN];
     cl_queue_properties queue_properties[] = {CL_QUEUE_PROPERTIES, CL_QUEUE_PROFILING_ENABLE, 0};
+    cl_platform_id *platforms = malloc(sizeof(cl_platform_id) * NUM_CL_PLATFORMS);
     
-    clGetPlatformIDs(NUM_CL_DEVICES, &platform, NULL);
-    clGetDeviceIDs(platform, CL_DEVICE_TYPE_DEFAULT, NUM_CL_DEVICES, &device, NULL);
+    clGetPlatformIDs(NUM_CL_PLATFORMS, platforms, NULL);
+    clGetDeviceIDs(platforms[DGPU_PLATFORM_INDEX], CL_DEVICE_TYPE_DEFAULT, NUM_CL_DEVICES, &device, NULL);
     *context = clCreateContext(NULL, NUM_CL_DEVICES, &device, NULL, NULL, NULL);
     *queue = clCreateCommandQueueWithProperties(*context, device, queue_properties, NULL);
 
@@ -108,6 +108,9 @@ void configure_opencl_env(cl_context *context, cl_command_queue* queue,
         free(messages);
     
     }
+
+    // Platforms already acquired; free malloc'ed memory
+    free(platforms);
 
 }
 
