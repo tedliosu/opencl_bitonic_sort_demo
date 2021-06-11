@@ -20,6 +20,8 @@
 #include <float.h>
 #include <time.h>
 #include <assert.h>
+#include <string.h>
+#include <errno.h>
 #include "array_utilities.h"
 #include "naive_bitonic_sort_opencl.h"
 #include "naive_bitonic_sort_serial.h"
@@ -40,18 +42,24 @@ char* get_opencl_program_code(char* opencl_program_file_location) {
 
       char *source_code_content = NULL;
       const char *file_read_mode = "r";
-      const char *file_open_error_msg = "Error opening OpenCL program file: ";
-      const char *file_io_error_msg = "Error reading OpenCL program file: ";
+      const char *file_open_error_msg = "Error opening %s: %s.\n";
+      const char *file_io_error_msg = "Error reading %s: %s\n";
       FILE *opencl_prog_file = fopen(opencl_program_file_location, file_read_mode);
 
       if (opencl_prog_file == NULL) {
-            perror(file_open_error_msg);
+         int global_err_num = errno;
+         fprintf(stderr, file_open_error_msg, opencl_program_file_location,
+                                                           strerror(global_err_num));
+         exit(global_err_num);
       } else {
             size_t init_buffer_size = 0;
             ssize_t num_bytes_read = getdelim(&source_code_content, &init_buffer_size,
                                                       TEXT_FILE_DELIM, opencl_prog_file);
             if (num_bytes_read < 0) {
-                perror(file_io_error_msg);
+               int global_err_num = errno;       
+               fprintf(stderr, file_io_error_msg, opencl_program_file_location,
+                                                        strerror(global_err_num));  
+               exit(global_err_num); 
             }
       }
 
