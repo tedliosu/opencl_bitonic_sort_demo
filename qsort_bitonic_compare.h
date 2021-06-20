@@ -92,6 +92,10 @@
 #define BITONIC_SERIAL_SORT_MESSAGE "Serial bitonic sort on CPU of %d element(s) in main memory took %lf seconds\n\n"
 #define QSORT_MESSAGE "Qsort on CPU of %d element(s) in main memory took %lf seconds\n\n"
 
+// Messages informing user what kind of sorting result verification program is performing
+#define BITONIC_PARALLEL_SORT_VERIFY_MSG ">>> Verifying correctness of parallelized bitonic sort on OpenCL device...\n"
+#define BITONIC_SERIAL_SORT_VERIFY_MSG ">>> Verifying correctness of serial bitonic sort in main memory...\n"
+
 #endif // QSORT_BITONIC_COMPARE_H
 // =================================================================================================
 

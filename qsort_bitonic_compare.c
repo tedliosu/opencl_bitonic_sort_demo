@@ -228,7 +228,9 @@ int main(int argc, char* argv[]) {
     }
 
     // Assert that all sorting was done correctly
+    printf(BITONIC_PARALLEL_SORT_VERIFY_MSG);
     assert_padded_arrays_equality(sample_array, sample_array_2nd_cp);
+    printf(BITONIC_SERIAL_SORT_VERIFY_MSG);
     assert_padded_arrays_equality(sample_array_cp, sample_array_2nd_cp);
 
     /* 
