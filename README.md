@@ -28,8 +28,8 @@
    parallelized bitonic sort in OpenCL, serial bitonic sort in C, and qsort in C with different types of
    data with various different parameters. You may also adjust the DESIRED_PLATFORM_INDEX macro value in
    "qsort_bitonic_compare.h" for running parallelize bitonic sort in OpenCL on different OpenCL platforms
-   on your machine. However, if you have only 1 OpenCL platform installed on your machine, you MUST
-   set DESIRED_PLATFORM_INDEX to 0.
+   on your machine. However, **if you have only 1 OpenCL platform installed on your machine, you MUST
+   set DESIRED_PLATFORM_INDEX to 0.**
 
 # Comments about code in general
 
