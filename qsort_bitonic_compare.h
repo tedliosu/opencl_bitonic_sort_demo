@@ -17,7 +17,10 @@
 
 #include "naive_bitonic_sort_opencl.h"
 
-// Size of array to be sorted via bitonic sort
+/*
+ * Size of array to be sorted via bitonic sort; 
+ * The following number has to be greater than 0!
+ */
 #define ARRAY_LEN 100000000
 
 // Number of OpenCL platforms on host machine

@@ -20,6 +20,10 @@ struct Array_With_Length_Padded *get_rand_padded_array(const unsigned int array_
    struct timespec curr_time_info;
    struct Array_With_Length_Padded* array_w_len_padded = malloc(sizeof(*array_w_len_padded));
    unsigned int padded_2n_length = (unsigned int) exp2(ceil(log2(array_len))); 
+   // Edge case handling where array_len = 1
+   if (array_len == 1) {
+        ++padded_2n_length;
+   }
    const float range_min_val = -1.0f;
    const float range_interval = 2.0f;
    const int even_test_num = 2;
