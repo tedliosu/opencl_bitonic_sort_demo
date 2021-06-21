@@ -36,6 +36,50 @@
  - Please see code comments in "naive_bitonic_sort_opencl.h" near top of file for web pages I gathered info
    from for implementing bitonic sort in OpenCL and implementing in regular C.
 
+# Performance Metrics
+
+## Program Output With Program Running OpenCL Using GPU ##
+
+### On Machine With A Ryzen 5 2600 And A RX Vega 56; Array Length 100 Million ###
+
+<pre>
+>>> OpenCL program compiler result message: - 
+
+>>> Starting OpenCL parallelized bitonic sorting of doubles with 256 work-items per workgroup, sort descending...
+Parallelized bitonic sort of 100000000 element(s) on OpenCL device took 2.494582 seconds
+
+>>> Starting sorting doubles with serial bitonic sort on CPU, sort descending...
+Serial bitonic sort on CPU of 100000000 element(s) in main memory took 62.986346 seconds
+
+>>> Starting sorting of doubles with qsort on CPU, sort descending...
+Qsort on CPU of 100000000 element(s) in main memory took 18.480286 seconds
+
+>>> Verifying correctness of parallelized bitonic sort on OpenCL device...
+Congratulations, both of your padded arrays are identical in content!
+>>> Verifying correctness of serial bitonic sort in main memory...
+Congratulations, both of your padded arrays are identical in content!
+</pre>
+
+### On Machine With A Ryzen 5 2600 And A RX Vega 56; Array Length 500 Million ###
+
+<pre>
+>>> OpenCL program compiler result message: - 
+
+>>> Starting OpenCL parallelized bitonic sorting of doubles with 256 work-items per workgroup, sort descending...
+Parallelized bitonic sort of 500000000 element(s) on OpenCL device took 11.263392 seconds
+
+>>> Starting sorting doubles with serial bitonic sort on CPU, sort descending...
+Serial bitonic sort on CPU of 500000000 element(s) in main memory took 300.024577 seconds
+
+>>> Starting sorting of doubles with qsort on CPU, sort descending...
+Qsort on CPU of 500000000 element(s) in main memory took 105.718650 seconds
+
+>>> Verifying correctness of parallelized bitonic sort on OpenCL device...
+Congratulations, both of your padded arrays are identical in content!
+>>> Verifying correctness of serial bitonic sort in main memory...
+Congratulations, both of your padded arrays are identical in content!
+</pre>
+
 # TODOs
 
  - Unit testing of both versions of bitonic sort with edge cases (e.g. array length of 1)
