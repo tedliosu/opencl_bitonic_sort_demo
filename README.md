@@ -26,10 +26,17 @@
    "naive_bitonic_sort_opencl.h", the NUM_THREADS_IN_BLOCK macro value in "naive_bitonic_sort_opencl.h",
    and the SORTING_DIRECTION macro value in "naive_bitonic_sort_opencl.h" to see the executable perform
    parallelized bitonic sort in OpenCL, serial bitonic sort in C, and qsort in C with different types of
-   data with various different parameters. You may also adjust the DESIRED_PLATFORM_INDEX macro value in
-   "qsort_bitonic_compare.h" for running parallelize bitonic sort in OpenCL on different OpenCL platforms
-   on your machine. However, **if you have only 1 OpenCL platform installed on your machine, you MUST
-   set DESIRED_PLATFORM_INDEX to 0.**
+   data with various different parameters.
+    - **IMPORTANT NOTE**: the value of the NUM_THREADS_IN_BLOCK macro in "naive_bitonic_sort_opencl.h"
+      must be a value such that the smallest power of 2 larger than the value of ARRAY_LEN in "qsort_bitonic_compare.h"
+      is divisible by the value of NUM_THREADS_IN_BLOCK.  For example, if the value of ARRAY_LEN is 100,
+      the value of NUM_THREADS_IN_BLOCK must be 128 or a power of 2 smaller than 128.  **If the value
+      of NUM_THREADS_IN_BLOCK doesn't meet the divisibility requirement specified here, the main C program
+      WILL SEGFAULT.**
+
+7. You may also adjust the DESIRED_PLATFORM_INDEX macro value in "qsort_bitonic_compare.h" for running
+   parallelize bitonic sort in OpenCL on different OpenCL platforms on your machine. However, **if you
+   have only 1 OpenCL platform installed on your machine, you MUST set DESIRED_PLATFORM_INDEX to 0.**
 
 # Comments about code in general
 
