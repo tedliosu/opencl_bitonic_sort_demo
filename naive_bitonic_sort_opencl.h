@@ -158,47 +158,29 @@ struct Array_With_Length_Padded {
      unsigned int padding_location_indicator;
 };
 
-/* 
- * A group of "array with length padded"
- * structs that the programmer wishes to
- * pass around in both device and main
- * memory to various functions.
- */
-struct List_Of_Arrays {
-    struct Array_With_Length_Padded* array_in;
-};
 
 /* 
- * A group of operands where each operand points to a
- * segment of data copied over from main memory to
- * device memory (could be VRAM or even FPGA memory)
- */
-struct Cl_Mem_Operands_List {
-     cl_mem* buffer_in;
-};
-
-/* 
- * Load arrays to be sorted using bitonic sort into OpenCL device's memory;
+ * Load array to be sorted using bitonic sort into OpenCL device's memory;
  * the data will processed by the kernel later on the OpenCL device.
- * The arrays each HAS TO BE at least of length 1.
+ * The array HAS TO BE at least of length 1.
  * Parameter details:
- *   - context --- the OpenCL execution context for which the load the arrays
+ *   - context --- the OpenCL execution context for which the load the array
  *   - queue --- the OpenCL command queue created from the aforementioned "context"
- *                in which to enqueue a write command to load the arrays into OpenCL
+ *                in which to enqueue a write command to load the array into OpenCL
  *                device memory.
- *   - array_list --- a struct containing "Array_With_Length_Padded" pointers which
- *                     points to arrays to be loaded into OpenCL device's memory.
- *   - cl_operands --- a struct containing pointers where each pointer points
- *                      to a segment of data copied over from main memory into
- *                      the OpenCL device's memory.
+ *   - input_array --- A pointer to a struct containing the array to be loaded into
+ *                     OpenCL device's memory.
+ *   - buffer_in --- a pointer to a memory handle where the handle corresponds
+ *                      to the array copied over from main memory into the OpenCL
+ *                      device's memory.
  */
-void load_arrays_bitonic_sort(cl_context *context, cl_command_queue* queue, 
-                              struct List_Of_Arrays array_list, struct Cl_Mem_Operands_List cl_operands);
+void load_array_bitonic_sort(cl_context *context, cl_command_queue* queue, 
+                               struct Array_With_Length_Padded* input_array, cl_mem* buffer_in);
 
 /* 
  * Parameter details:
  * - queue --- the OpenCL command queue in which to enqueue commands for
- *              sorting arrays using bitonic sort.
+ *              sorting an array using bitonic sort.
  * - cl_program* program --- MUST point to a program in memory which has an in-place
  *                           bitonic sort kernel function of signature:
  *                           __kernel void naive_bitonic_sort_merge_step(__global ARRAY_TYPE* input_array,
@@ -207,11 +189,11 @@ void load_arrays_bitonic_sort(cl_context *context, cl_command_queue* queue,
  *                                                                              const unsigned int sort_direction)
  * - cl_kernel* kernel --- must point to a kernel function in memory whose function signature
  *                         is the "naive_bitonic_sort_merge_step" signature specified above.
- * - array_list --- a struct containing "Array_With_Length_Padded" pointers which
- *                   point to arrays to be sorted using bitonic sort.
- * - cl_operands --- a struct containing pointers where each pointer points to an array
- *                    in the OpenCL device's memory; each of those arrays is to be sorted
- *                    by this function using bitonic sort.
+ * - input_array --- a struct containing a pointer to the array to be sorted and a field
+ *                          storing the array's length; the array is to be sorted using
+ *                          bitonic sort.
+ * - buffer_in --- a pointer to a memory handle corresponding to a copy of the array to be sorted
+ *                 within the OpenCL device's memory.
  * - sorting_direction --- "DESCENDING_SORT" (i.e. non-zero value) indicates to sort descending;
  *                          "ASCENDING_SORT" (i.e. zero) indicates to sort ascending.
  *
@@ -220,9 +202,8 @@ void load_arrays_bitonic_sort(cl_context *context, cl_command_queue* queue,
  * The array being sorted HAS TO BE at least of length 1.
  */
 void opencl_bitonic_sort(cl_command_queue *queue, cl_program *program,
-                            cl_kernel* kernel, struct List_Of_Arrays array_list,
-                                            struct Cl_Mem_Operands_List cl_operands,
-                                                const unsigned int sorting_direction);
+                           cl_kernel* kernel, struct Array_With_Length_Padded* input_array,
+                                       cl_mem* buffer_in, const unsigned int sorting_direction);
 
 #endif // NAIVE_BITONIC_SORT_OPENCL_H
 // =================================================================================================

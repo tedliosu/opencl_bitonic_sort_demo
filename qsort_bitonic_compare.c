@@ -165,8 +165,6 @@ int main(int argc, char* argv[]) {
      * comparing performance to OpenCL parallelized bitonic sorting.
      */
     struct Array_With_Length_Padded* sample_array_cp = deep_cp_padded_array(sample_array);
-    struct List_Of_Arrays array_list = { sample_array };
-    struct Cl_Mem_Operands_List cl_mem_ops = { &buffer_in };
     
     configure_opencl_env(&context, &queue, &program);
 
@@ -174,14 +172,14 @@ int main(int argc, char* argv[]) {
     timespec_get(&current_time, TIME_UTC);
     sort_start_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
 
-    load_arrays_bitonic_sort(&context, &queue, array_list, cl_mem_ops);
+    load_array_bitonic_sort(&context, &queue, sample_array, &buffer_in);
 
-    opencl_bitonic_sort(&queue, &program, &kernel, array_list, cl_mem_ops, SORTING_DIRECTION);
+    opencl_bitonic_sort(&queue, &program, &kernel, sample_array, &buffer_in, SORTING_DIRECTION);
 
     // Copy the sorted array back to the CPU memory
-    clEnqueueReadBuffer(queue, *(cl_mem_ops.buffer_in), CL_BLOCKING, CL_BUFFER_OFFSET,
-                                 sample_array->padded_2n_length*sizeof(ARRAY_TYPE_DECLARED),
-                                                         sample_array->contents, 0, NULL, NULL);
+    clEnqueueReadBuffer(queue, buffer_in, CL_BLOCKING, CL_BUFFER_OFFSET,
+                              sample_array->padded_2n_length*sizeof(ARRAY_TYPE_DECLARED),
+                                                     sample_array->contents, 0, NULL, NULL);
 
     // Get time of when parallel bitonic sort finishes executing
     timespec_get(&current_time, TIME_UTC);
