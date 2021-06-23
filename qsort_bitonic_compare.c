@@ -160,8 +160,11 @@ int main(int argc, char* argv[]) {
     struct timespec current_time;
     double sort_start_time, sort_end_time;
     struct Array_With_Length_Padded* sample_array = get_rand_padded_array(ARRAY_LEN);
+    /*
+     * Copy of array we wish to sort, to be sorted by serial bitonic sorting for
+     * comparing performance to OpenCL parallelized bitonic sorting.
+     */
     struct Array_With_Length_Padded* sample_array_cp = deep_cp_padded_array(sample_array);
-    struct Array_With_Length_Padded* sample_array_2nd_cp = deep_cp_padded_array(sample_array);
     struct List_Of_Arrays array_list = { sample_array };
     struct Cl_Mem_Operands_List cl_mem_ops = { &buffer_in };
     
@@ -186,7 +189,25 @@ int main(int argc, char* argv[]) {
 
     // Report to user time spent on sorting using parallelized bitonic sort in OpenCL
     printf(BITONIC_PARALLEL_SORT_MESSAGE, sample_array->array_len_actual, sort_end_time - sort_start_time);
- 
+
+    /*
+     * Cleanup host and device memory of OpenCL
+     * objects as we are done with sorting using
+     * OpenCL runtime.
+     */
+    clReleaseMemObject(buffer_in);
+    clReleaseCommandQueue(queue);
+    clReleaseContext(context);
+    clReleaseProgram(program);
+    clReleaseKernel(kernel);
+
+    /*
+     * Now that we have cleaned up objects no longer needed in main memory, create another
+     * copy of the array we wish to sort so that we may generate the correct sorted result
+     * using the C standard library's built-in qsort function.
+     */ 
+    struct Array_With_Length_Padded* sample_array_2nd_cp = deep_cp_padded_array(sample_array_cp);
+
     // Get time of when serial bitonic sort algorithm starts executing
     timespec_get(&current_time, TIME_UTC);
     sort_start_time = (double) current_time.tv_sec + ((double) current_time.tv_nsec) / NANOSECS_IN_SEC;
@@ -232,16 +253,6 @@ int main(int argc, char* argv[]) {
     assert_padded_arrays_equality(sample_array, sample_array_2nd_cp);
     printf(BITONIC_SERIAL_SORT_VERIFY_MSG);
     assert_padded_arrays_equality(sample_array_cp, sample_array_2nd_cp);
-
-    /* 
-     * Give back to the system both OpenCL device memory space and main
-     * system memory space used during program execution.
-     */
-    clReleaseMemObject(buffer_in);
-    clReleaseCommandQueue(queue);
-    clReleaseContext(context);
-    clReleaseProgram(program);
-    clReleaseKernel(kernel);
 
     // Free the host memory objects
     free(sample_array->contents);
