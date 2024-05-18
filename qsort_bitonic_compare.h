@@ -21,16 +21,16 @@
  * Size of array to be sorted via bitonic sort; 
  * The following number has to be greater than 0!
  */
-#define ARRAY_LEN 100000000
+#define ARRAY_LEN 134217728
 
 // Number of OpenCL platforms on host machine
-#define NUM_CL_PLATFORMS 2
+#define NUM_CL_PLATFORMS 3
 /*
  * Index of desired OpenCL platform (e.g. Portable Computing
  *    Language, AMD Accelerated Parallel Processing) in
  *    list of platforms returned.
  */
-#define DESIRED_PLATFORM_INDEX 0
+#define DESIRED_PLATFORM_INDEX 1
 // Number of OpenCL devices per OpenCL platform
 #define NUM_CL_DEVICES 1
 // Number of OpenCL programs to be loaded
@@ -89,6 +89,9 @@
 // Messages to user informing time took to sort and how many numbers were sorted
 #define BITONIC_PARALLEL_SORT_MESSAGE "Parallelized bitonic sort of %d element(s)"\
                                             " on OpenCL device took %lf seconds\n\n"
+#define BITONIC_PARALLEL_SORT_MESSAGE_NO_CP "Parallelized bitonic sort of %d element(s)"\
+                                            " on OpenCL device took %lf seconds \n"\
+                                            "WITHOUT TRANSFER TO AND FROM HOST \n\n"
 #define BITONIC_SERIAL_SORT_MESSAGE "Serial bitonic sort on CPU of %d element(s) in main memory took %lf seconds\n\n"
 #define QSORT_MESSAGE "Qsort on CPU of %d element(s) in main memory took %lf seconds\n\n"
 
